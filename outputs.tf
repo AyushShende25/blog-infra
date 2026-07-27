@@ -17,3 +17,8 @@ output "nat_gateway_ids" {
   description = "Map of public subnet names to NAT Gateway IDs"
   value       = module.vpc.nat_gateway_ids
 }
+
+output "db_endpoint" {
+  description = "Database endpoint"
+  value       = module.rds.endpoint
+}

@@ -21,3 +21,30 @@ variable "subnets" {
   }))
   description = "Map of subnets to create, key = subnet name"
 }
+
+# DATABASE - RDS
+
+variable "db_subnet_group_name" {
+  type = string
+}
+
+variable "db_name" {
+  type = string
+}
+
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_instance_class" {
+  type = string
+}
+
+variable "db_allocated_storage" {
+  type = number
+}
