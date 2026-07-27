@@ -3,3 +3,21 @@ variable "aws_region" {
   type        = string
   default     = "ap-south-1"
 }
+
+variable "vpc_cidr" {
+  type        = string
+  description = "The IPv4 CIDR block for the VPC."
+}
+
+variable "domain_name" {
+  type = string
+}
+
+variable "subnets" {
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+    type              = string
+  }))
+  description = "Map of subnets to create, key = subnet name"
+}
