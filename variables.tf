@@ -41,10 +41,48 @@ variable "db_password" {
   sensitive = true
 }
 
+variable "db_identifier" {
+  type = string
+}
+variable "psql_version" {
+  type = string
+}
 variable "db_instance_class" {
   type = string
 }
 
 variable "db_allocated_storage" {
   type = number
+}
+
+# ELASTICACHE
+variable "redis_replication_group_name" {
+  type        = string
+  description = "Unique identifier for the replication group"
+}
+
+variable "redis_node_type" {
+  type        = string
+  description = "Instance type for Redis nodes"
+}
+
+variable "redis_subnet_group_name" {
+  type        = string
+  description = "Name for the ElastiCache subnet group"
+}
+
+variable "redis_engine_version" {
+  type        = string
+  description = "Redis engine version"
+}
+
+variable "num_cache_clusters" {
+  type        = number
+  description = "Number of replicas for redis"
+}
+
+variable "redis_password" {
+  type        = string
+  description = "Password (AUTH token) for Redis client authentication"
+  sensitive   = true
 }

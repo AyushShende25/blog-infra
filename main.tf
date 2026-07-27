@@ -25,8 +25,8 @@ module "security_groups" {
 
 module "rds" {
   source                  = "./modules/rds"
-  db_identifier           = "inkspire-psql"
-  engine_version          = "18.3"
+  db_identifier           = var.db_identifier
+  engine_version          = var.psql_version
   db_subnet_group_name    = var.db_subnet_group_name
   subnet_ids              = values(module.vpc.db_subnet_ids)
   db_name                 = var.db_name
@@ -39,6 +39,23 @@ module "rds" {
   vpc_security_group_ids  = [module.security_groups.db_sg_id]
   tags = {
     Name    = "inkspire-database"
+    Env     = "production"
+    Website = var.domain_name
+  }
+}
+
+module "redis" {
+  source                  = "./modules/elasticache"
+  replication_group_id    = var.redis_replication_group_name
+  node_type               = var.redis_node_type
+  redis_subnet_group_name = var.redis_subnet_group_name
+  security_group_ids      = [module.security_groups.redis_sg_id]
+  subnet_ids              = values(module.vpc.db_subnet_ids)
+  engine_version          = var.redis_engine_version
+  password                = var.redis_password
+  num_cache_clusters      = var.num_cache_clusters
+  tags = {
+    Name    = "inkspire-redis"
     Env     = "production"
     Website = var.domain_name
   }

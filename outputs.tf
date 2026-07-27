@@ -22,3 +22,8 @@ output "db_endpoint" {
   description = "Database endpoint"
   value       = module.rds.endpoint
 }
+
+output "redis_endpoint" {
+  description = "Redis primary endpoint"
+  value       = module.redis.primary_endpoint
+}
