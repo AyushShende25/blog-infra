@@ -121,3 +121,22 @@ module "worker_launch_template" {
     Website = var.domain_name
   }
 }
+
+module "alb" {
+  source = "./modules/alb"
+
+  lb_name               = "inkspire-prod-alb"
+  internal              = false
+  public_subnet_ids     = values(module.vpc.public_subnet_ids)
+  lb_security_group_ids = [module.security_groups.lb_sg_id]
+  vpc_id                = module.vpc.vpc_id
+
+  target_group_name = "inkspire-api-tg"
+  app_port          = 80
+  health_check_path = "/health"
+
+  tags = {
+    Env     = "production"
+    Website = var.domain_name
+  }
+}
