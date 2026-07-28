@@ -99,3 +99,19 @@ variable "image_tag_mutability" {
   description = "The tag mutability setting for the repository. Must be MUTABLE or IMMUTABLE"
   default     = "IMMUTABLE"
 }
+
+# Launch-Template
+variable "ami_id" {
+  type        = string
+  description = "The AMI ID to use for the instance"
+}
+
+variable "api_instance_type" {
+  type    = string
+  default = "t3.small"
+}
+
+variable "worker_instance_type" {
+  type    = string
+  default = "t3.small"
+}

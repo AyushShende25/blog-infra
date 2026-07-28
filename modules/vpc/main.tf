@@ -102,7 +102,7 @@ resource "aws_route_table" "application" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = local.nat_gateway_by_az[
+    nat_gateway_id = local.nat_gateway_by_az[
       each.value.availability_zone
     ]
   }

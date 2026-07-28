@@ -86,3 +86,38 @@ module "app_ecr" {
     Website = var.domain_name
   }
 }
+
+module "api_launch_template" {
+  source = "./modules/launch-template"
+
+  template_name             = "inkspire-api-template"
+  image_id                  = var.ami_id
+  instance_type             = var.api_instance_type
+  iam_instance_profile_name = module.iam.instance_profile_name
+  vpc_security_group_ids    = [module.security_groups.api_sg_id]
+  user_data_script          = "${path.module}/scripts/api-user-data.sh"
+
+  tags = {
+    Name    = "inkspire-api"
+    Env     = "production"
+    Website = var.domain_name
+  }
+}
+
+module "worker_launch_template" {
+  source = "./modules/launch-template"
+
+  template_name             = "inkspire-worker-template"
+  image_id                  = var.ami_id
+  instance_type             = var.worker_instance_type
+  iam_instance_profile_name = module.iam.instance_profile_name
+  vpc_security_group_ids    = [module.security_groups.worker_sg_id]
+
+  user_data_script = "${path.module}/scripts/worker-user-data.sh"
+
+  tags = {
+    Name    = "inkspire-worker"
+    Env     = "production"
+    Website = var.domain_name
+  }
+}
