@@ -86,3 +86,16 @@ variable "redis_password" {
   description = "Password (AUTH token) for Redis client authentication"
   sensitive   = true
 }
+
+# ECR
+
+variable "ecr_repository_name" {
+  type        = string
+  description = "Name of the ECR repository"
+}
+
+variable "image_tag_mutability" {
+  type        = string
+  description = "The tag mutability setting for the repository. Must be MUTABLE or IMMUTABLE"
+  default     = "IMMUTABLE"
+}
