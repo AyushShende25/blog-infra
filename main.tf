@@ -60,3 +60,15 @@ module "redis" {
     Website = var.domain_name
   }
 }
+
+module "iam" {
+  source = "./modules/iam"
+
+  role_name            = "inkspire_app_role"
+  ssm_parameter_prefix = "inkspire/*"
+
+  tags = {
+    Env     = "production"
+    Website = var.domain_name
+  }
+}
