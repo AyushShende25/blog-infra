@@ -140,3 +140,43 @@ module "alb" {
     Website = var.domain_name
   }
 }
+
+module "api_asg" {
+  source = "./modules/autoscaling"
+
+  name                   = "inkspire-api-asg"
+  min_size               = 2
+  max_size               = 5
+  desired_capacity       = 2
+  subnet_ids             = values(module.vpc.app_subnet_ids)
+  launch_template_id     = module.api_launch_template.id
+  health_check_type      = "ELB"
+  target_group_arns      = [module.alb.target_group_arn]
+  min_healthy_percentage = 50
+  max_healthy_percentage = 200
+  tags = {
+    Env     = "production"
+    Role    = "api"
+    Website = var.domain_name
+  }
+}
+
+module "worker_asg" {
+  source = "./modules/autoscaling"
+
+  name                   = "inkspire-worker-asg"
+  min_size               = 1
+  max_size               = 3
+  desired_capacity       = 1
+  subnet_ids             = values(module.vpc.app_subnet_ids)
+  launch_template_id     = module.worker_launch_template.id
+  health_check_type      = "EC2"
+  target_group_arns      = []
+  min_healthy_percentage = 100
+  max_healthy_percentage = 200
+  tags = {
+    Env     = "production"
+    Role    = "worker"
+    Website = var.domain_name
+  }
+}
