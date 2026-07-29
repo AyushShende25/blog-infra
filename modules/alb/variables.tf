@@ -49,6 +49,11 @@ variable "s3_logs_bucket_id" {
   default     = null
 }
 
+variable "certificate_arn" {
+  type        = string
+  description = "ARN of the ACM certificate created for the ALB"
+}
+
 variable "tags" {
   type        = map(string)
   description = "Tags to assign to resources"
