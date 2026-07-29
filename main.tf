@@ -7,7 +7,7 @@ module "vpc" {
   tags = {
     Name    = "inkspire_vpc"
     Env     = "production"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -19,7 +19,7 @@ module "security_groups" {
   tags = {
     Name    = "inkspire_vpc"
     Env     = "production"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -40,7 +40,7 @@ module "rds" {
   tags = {
     Name    = "inkspire-database"
     Env     = "production"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -57,7 +57,7 @@ module "redis" {
   tags = {
     Name    = "inkspire-redis"
     Env     = "production"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -69,7 +69,7 @@ module "iam" {
 
   tags = {
     Env     = "production"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -83,7 +83,7 @@ module "app_ecr" {
 
   tags = {
     Env     = "production"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -100,7 +100,7 @@ module "api_launch_template" {
   tags = {
     Name    = "inkspire-api"
     Env     = "production"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -118,7 +118,7 @@ module "worker_launch_template" {
   tags = {
     Name    = "inkspire-worker"
     Env     = "production"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -137,7 +137,7 @@ module "alb" {
 
   tags = {
     Env     = "production"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -157,7 +157,7 @@ module "api_asg" {
   tags = {
     Env     = "production"
     Role    = "api"
-    Website = var.domain_name
+    Project = var.domain_name
   }
 }
 
@@ -177,6 +177,35 @@ module "worker_asg" {
   tags = {
     Env     = "production"
     Role    = "worker"
-    Website = var.domain_name
+    Project = var.domain_name
+  }
+}
+
+module "s3_media" {
+  source = "./modules/s3"
+
+  bucket_name                 = "${var.domain_name}-media-uploads"
+  cloudfront_distribution_arn = module.cloudfront_media.arn
+  client_url                  = "https://${var.domain_name}"
+  enable_cors                 = true
+
+  tags = {
+    Type    = "media-uploads"
+    Env     = "production"
+    Project = var.domain_name
+  }
+}
+
+module "s3_react" {
+  source = "./modules/s3"
+
+  bucket_name                 = var.domain_name
+  cloudfront_distribution_arn = module.cloudfront_react.arn
+  enable_cors                 = false
+
+  tags = {
+    Type    = "frontend-static"
+    Env     = "production"
+    Project = var.domain_name
   }
 }
