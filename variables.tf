@@ -13,6 +13,11 @@ variable "domain_name" {
   type = string
 }
 
+variable "environment" {
+  type    = string
+  default = "production"
+}
+
 variable "subnets" {
   type = map(object({
     cidr_block        = string
