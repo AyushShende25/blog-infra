@@ -10,6 +10,11 @@ variable "ssm_parameter_prefix" {
   default     = "inkspire/*"
 }
 
+variable "s3_media_bucket_arn" {
+  type        = string
+  description = "ARN of the media-uploads S3 Bucket"
+}
+
 
 variable "tags" {
   type        = map(string)

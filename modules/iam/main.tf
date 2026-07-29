@@ -43,6 +43,34 @@ data "aws_iam_policy_document" "parameter_store" {
   }
 }
 
+data "aws_iam_policy_document" "s3_media_policy" {
+  statement {
+    sid    = "AllowS3ObjectCRUD"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:DeleteObject",
+      "s3:PutObjectAcl"
+    ]
+    resources = ["${var.s3_media_bucket_arn}/*"]
+  }
+
+  statement {
+    sid       = "AllowS3BucketList"
+    effect    = "Allow"
+    actions   = ["s3:ListBucket", "s3:GetBucketLocation"]
+    resources = [var.s3_media_bucket_arn]
+  }
+}
+
+resource "aws_iam_policy" "s3_media_policy" {
+  name        = "${var.role_name}_s3_media_policy"
+  path        = "/"
+  description = "Allows EC2 instances to read, upload, and delete objects in the media S3 bucket"
+  policy      = data.aws_iam_policy_document.s3_media_policy.json
+}
+
 resource "aws_iam_policy" "parameter_store" {
   name        = "${var.role_name}_ssm_parameter_store_policy"
   path        = "/"
@@ -60,6 +88,11 @@ data "aws_iam_policy" "ssm" {
 
 data "aws_iam_policy" "cw" {
   arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "s3_media_policy" {
+  role       = aws_iam_role.instance.name
+  policy_arn = aws_iam_policy.s3_media_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "parameter_store" {
