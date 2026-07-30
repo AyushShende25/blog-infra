@@ -156,6 +156,10 @@ module "api_asg" {
       Role = "api"
     }
   )
+
+  depends_on = [
+    module.ssm
+  ]
 }
 
 module "worker_asg" {
@@ -176,6 +180,10 @@ module "worker_asg" {
       Role = "worker"
     }
   )
+
+  depends_on = [
+    module.ssm
+  ]
 }
 
 module "s3_media" {

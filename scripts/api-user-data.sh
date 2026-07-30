@@ -13,7 +13,7 @@ IMAGE_TAG=$(aws ssm get-parameter \
     --query "Parameter.Value" \
     --output text)
             
-docker pull "${ECR_REGISTRY}/inkspire:${IMAGE_TAG}"
+docker pull "${ECR_REGISTRY}/inkspire-backend:${IMAGE_TAG}"
 
 PARAMS=$(aws ssm get-parameters-by-path \
     --region "${REGION}" \
@@ -25,11 +25,11 @@ echo "$PARAMS" \
 | jq -r '.Parameters[] | "\(.Name | split("/")[-1])=\(.Value)"' \
 >> "${APP_DIR}/.env"
 
-docker rm -f inkspire || true
+docker rm -f inkspire-api || true
 
 docker run -d \
     --name inkspire-api \
     --restart unless-stopped \
     --env-file "${APP_DIR}/.env" \
     -p 80:4000 \
-    "${ECR_REGISTRY}/inkspire:${IMAGE_TAG}"
+    "${ECR_REGISTRY}/inkspire-backend:${IMAGE_TAG}"
