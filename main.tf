@@ -312,7 +312,7 @@ module "ssm" {
 
   media_bucket_name   = module.s3_media.bucket_id
   media_bucket_region = var.aws_region
-  media_bucket_domain = module.s3_media.bucket_regional_domain_name
+  media_bucket_domain = "https://media.${var.domain_name}"
 
   tags = local.common_tags
 }
